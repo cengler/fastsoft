@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="Casino Online" default="zip">
+
+<property name="dir.lib" value="lib" />
+<property name="dir.doc" value="doc" />
+<property name="dir.api" value="${dir.doc}/api" />
+<property name="dir.bin" value="bin" />
+<property name="dir.jar" value="jar" />
+<property name="dir.src" value="src" />
+<property name="dir.etc" value="etc" />
+<property name="dir.rep" value="report" />
+<property name="name.jar" value="FastSoft.jar" />
+<property name="clase.main" value="cae.rev.FastSoft" />
+
+<path id="classpath">
+        <fileset dir="${dir.lib}" includes="jdepend-2.9.jar"/>
+        <fileset dir="${dir.lib}" includes="log4j.jar"/>
+        <fileset dir="${dir.lib}" includes="xstream-1.3.jar"/>
+        <fileset dir="${dir.lib}" includes="checkstyle-all-4.4.jar"/>
+        <fileset dir="${dir.lib}" includes="opencsv-1.8.jar"/>
+        <fileset dir="${dir.lib}" includes="UmlGraph.jar"/>    
+</path>
+
+   
+<taskdef resource="checkstyletask.properties"
+          classpathref="classpath"/>
+
+
+<target name="clear" description="Borra para un recompilacion completa">
+        <echo>Borrando directorios: ................................. </echo>
+    <delete dir="${dir.bin}" />
+    <delete dir="${dir.jar}" />
+        <delete dir="${dir.rep}" />
+        <delete dir="${dir.doc}" />
+</target>
+
+<target name="makedir" depends="clear" description="Crea los directorios">
+        <echo>verificando y creando directorios: ..................... </echo>
+    <mkdir dir="${dir.bin}" />
+    <mkdir dir="${dir.jar}" />
+        <mkdir dir="${dir.lib}" />
+        <mkdir dir="${dir.rep}" />
+        <mkdir dir="${dir.doc}" />
+        <mkdir dir="${dir.api}" />
+</target>
+
+<target name="make" depends="makedir" description="Compila el proyecto">
+        <echo>Compilando Proyecto: .................................. </echo>
+        <copy todir="${dir.bin}">
+                <fileset dir="${dir.src}">
+                        <exclude name="**/*.java"/>
+                </fileset>
+        </copy>
+    <javac srcdir="${dir.src}" destdir="${dir.bin}" classpathref="classpath" />
+</target>
+
+<target name="zip" depends="make" description="Crea el jar">
+        <echo>Creando Jars: .......................................... </echo>
+        <mkdir dir="${dir.jar}/lib" />
+        <mkdir dir="${dir.jar}/pedidos" />
+        <copy todir="${dir.jar}/lib">
+                <fileset dir="${dir.lib}">
+                        <include name="**/*.jar"/>
+                </fileset>
+        </copy>
+        <copy todir="${dir.jar}">
+                <fileset dir="resources_java">
+                        <include name="**/*.*"/>
+                </fileset>
+        </copy>
+    <jar jarfile="${dir.jar}/${name.jar}" basedir="${dir.bin}">
+                <manifest>
+                        <attribute name="Main-Class" value="${clase.main}"/>
+                        <attribute name="Class-Path" value="lib/xstream-1.3.jar lib/log4j.jar"/>
+                </manifest>
+        </jar>
+       
+</target>
+   
+<target name="all" depends="make" description="Realiza todo.">
+        <echo>All Actions: ..................................... </echo>
+</target>
+
+<target name="run"  description="Ejecuta la pizzeria.">
+        <java fork="true" classname="${clase.main}" dir="${dir.jar}">
+                <classpath>
+                        <path refid="classpath"/>
+                        <path location="${dir.jar}/${name.jar}"/>
+                </classpath>                            
+        </java>
+</target>
+
+</project>
