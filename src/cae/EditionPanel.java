@@ -7,8 +7,11 @@ import java.awt.Insets;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -26,7 +29,9 @@ public class EditionPanel extends Panel implements ActionListener
 	private JButton abrirButton;
 	private JButton patchButton;
 	private JButton keygenButton;
-	private JTextField nameTextFiled;
+	private JTextField serialTextFiled;
+	
+	private Icon setupIcon;
 	
 	public EditionPanel()
 	{
@@ -40,17 +45,23 @@ public class EditionPanel extends Panel implements ActionListener
 		c.weightx = 10;
 		c.weighty =10;
 
-		nameLabel = new JLabel("test");
-		c.fill = GridBagConstraints.NONE;
+		nameLabel = new JLabel("");
+
 		c.gridx = 0;
 		c.gridy = 0;
 		add(nameLabel, c);
 		
-		nameTextFiled = new JTextField();
-		c.fill = GridBagConstraints.HORIZONTAL;
+		JLabel serialLabel = new JLabel("Serial: ");
 		c.gridx = 1;
 		c.gridy = 0;
-		add(nameTextFiled, c);
+		add(serialLabel, c);
+		
+		serialTextFiled = new JTextField();
+		c.gridwidth = 3;
+		c.gridx = 2;
+		c.gridy = 0;
+		add(serialTextFiled, c);
+		c.gridwidth = 1;
 		
 		icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Info.png"));
 		leameButton = new JButton("Leame", icon);
@@ -59,8 +70,8 @@ public class EditionPanel extends Panel implements ActionListener
 		add(leameButton, c);
 		
 		//ImageIcon icon = new ImageIcon(resour);
-		icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Settings.png"));
-		setupButton = new JButton("Setup", icon);
+		setupIcon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Settings.png"));
+		setupButton = new JButton("Setup", setupIcon);
 		c.gridx = 1;
 		c.gridy = 1;
 		add(setupButton, c);
@@ -96,33 +107,52 @@ public class EditionPanel extends Panel implements ActionListener
 		abrirButton.setEnabled(false);
 		patchButton.setEnabled(false);
 		keygenButton.setEnabled(false);
-		nameTextFiled.setText("Ninguno");
+		serialTextFiled.setText(null);
+		nameLabel.setIcon(null);
+		nameLabel.setText(null);
 		
 		if(info != null)
 		{
 			nameLabel.setText(info.getName());
-
+			
 			leameButton.setEnabled(info.getLeame() != null);
 			setupButton.setEnabled(info.getExe() != null);
 			abrirButton.setEnabled(info.getFile() != null);
 			patchButton.setEnabled(info.getPatch() != null);
 			keygenButton.setEnabled(info.getKeygen() != null);
 			
+			if(info.getExe() != null)
+			{
+				sun.awt.shell.ShellFolder sf;
+				try {
+					sf = sun.awt.shell.ShellFolder.getShellFolder(info.getExe());
+					Icon icon = new ImageIcon(sf.getIcon(true));
+					nameLabel.setIcon(icon);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} 
+
 		}
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == abrirButton)
-		{
-			open();
+		if(e.getSource() == abrirButton) {
+			open(info.getFile().getParentFile());
+		} else if(e.getSource() == setupButton) {
+			openExe(info.getExe().getAbsolutePath());
+		} else if(e.getSource() == patchButton) {
+			openExe(info.getPatch().getAbsolutePath());
+		}else if(e.getSource() == keygenButton) {
+			openExe(info.getKeygen().getAbsolutePath());
 		}
 	}
 	
-	private void open()
+	private void open(File file)
     {
     	try {
-			Desktop.getDesktop().open(info.getFile().getParentFile());
+			Desktop.getDesktop().open(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -9,19 +9,21 @@ import cae.model.ProgramInfo;
 public class ProgramTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
+	private List<ProgramInfo> data = null;
+
 	private static final int NAME = 0;
 	private static final int WEB = 1;
 	private static final int KEYS = 2;
 	private static final int SERIAL = 3;
 	private static final int NOTES = 4;
-	private List<ProgramInfo> data = null;
-
+	private String[] columnNames = {"Name", "Web", "Keys", "Serial", "Notes"};
+	
+	
 	public ProgramTableModel(List<ProgramInfo> data) 
 	{
 		this.data = data;
 	}
-
-	private String[] columnNames = {"Name", "Web", "Keys", "Serial", "Notes"};
+	
 	
 	public int getColumnCount() {
 		return columnNames.length;
