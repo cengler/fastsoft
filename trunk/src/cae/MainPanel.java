@@ -8,6 +8,7 @@ import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -21,6 +22,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
@@ -121,15 +125,27 @@ public class MainPanel extends Panel implements ActionListener {
 		c.gridwidth=3;
 		add(filtroLabel, c);
 		
-		JTextField filtroTextField = new JTextField();
+		final JTextField filtroTextField = new JTextField();
+		filtroTextField.getDocument().addDocumentListener(new DocumentListener(){
+
+			public void changedUpdate(DocumentEvent e) {
+				updateFilter(filtroTextField.getText());
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				updateFilter(filtroTextField.getText());
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				updateFilter(filtroTextField.getText());
+			}
+			
+		});
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 3;
 		add(filtroTextField, c);
 		
-		
-		
-		//Create a table with a sorter.
         List<ProgramInfo> data = new Services().load();
         model = new ProgramTableModel(data);
         sorter = new TableRowSorter<ProgramTableModel>(model);
@@ -137,38 +153,22 @@ public class MainPanel extends Panel implements ActionListener {
         table.setRowSorter(sorter);
         table.setPreferredScrollableViewportSize(new Dimension(800, 200));
         table.setFillsViewportHeight(true);
-
-        //For the purposes of this example, better to have a single
-        //selection.
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        //When selection changes, provide user with row numbers for
-        //both view and model.
         table.getSelectionModel().addListSelectionListener(
                 new ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent event) {
                         int viewRow = table.getSelectedRow();
                         if (viewRow < 0) {
-                            /*//Selection got filtered away.
-                            openFolder.setEnabled(false);
-                            openExe.setEnabled(false);
-                            openKeygen.setEnabled(false);
-                            edit.setEnabled(false);*/
+                        	editPanel.setInfo(null);
                         } else {
                             int modelRow = 
                                 table.convertRowIndexToModel(viewRow);
                             ProgramInfo info = model.getRowObject(modelRow);
                             editPanel.setInfo(info);
-                            
-                            /*edit.setEnabled(true);
-                            openFolder.setEnabled(true);
-                            openExe.setEnabled((FastSoft.info.getExe() != null));
-                            openKeygen.setEnabled((FastSoft.info.getKeygen() != null));*/
                         }
                     }
                 }
         );
-        //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
         c.gridx = 0;
 		c.gridy = 4;
@@ -178,12 +178,23 @@ public class MainPanel extends Panel implements ActionListener {
 		add(scrollPane, c);
 		
 		editPanel = new EditionPanel();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 5;
 		add(editPanel, c);
 	}
 
-	@Override
+	protected void updateFilter(String text) {
+		List<RowFilter<Object, Object>> filterList = 
+			new ArrayList<RowFilter<Object,Object>>();
+		String[] filterTexts = text.split(" ");
+		for (String f : filterTexts) {
+			filterList.add(RowFilter.regexFilter(f, 0,1,2,3));
+		}
+		sorter.setRowFilter(RowFilter.andFilter(filterList));
+	}
+
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == buscarButton) {
 			buscarArchivos();
