@@ -1,4 +1,4 @@
-package cae;
+package cae.model;
 
 import java.io.File;
 
@@ -9,10 +9,16 @@ public class ProgramInfo {
 	private String serial;
 	private String notes;
 	private String keys;
-
+	private String plataforma;
+	private String version;
+	private String compania;
+	
+			
 	private File exe;
 	private File file;
 	private File keygen;
+	private File patch;
+	private File leame;
 	
 	public String getWeb() {
 		return web;
@@ -61,6 +67,37 @@ public class ProgramInfo {
 	}
 	public void setKeygen(File keygen) {
 		this.keygen = keygen;
+	}
+	
+	public String getPlataforma() {
+		return plataforma;
+	}
+	public void setPlataforma(String plataforma) {
+		this.plataforma = plataforma;
+	}
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	public String getCompania() {
+		return compania;
+	}
+	public void setCompania(String compania) {
+		this.compania = compania;
+	}
+	public File getPatch() {
+		return patch;
+	}
+	public void setPatch(File patch) {
+		this.patch = patch;
+	}
+	public File getLeame() {
+		return leame;
+	}
+	public void setLeame(File leame) {
+		this.leame = leame;
 	}
 	@Override
 	public String toString() {
