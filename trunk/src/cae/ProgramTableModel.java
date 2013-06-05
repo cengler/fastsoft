@@ -1,9 +1,10 @@
-package cae.rev;
+package cae;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import cae.ProgramInfo;
+import cae.model.ProgramInfo;
+
 
 public class ProgramTableModel extends AbstractTableModel {
 
@@ -65,4 +66,14 @@ public class ProgramTableModel extends AbstractTableModel {
 	{
 		return data.get(row);
 	}
+
+	public List<ProgramInfo> getData() {
+		return data;
+	}
+
+	public void setData(List<ProgramInfo> data) {
+		this.data = data;
+	}
+	
+	
 }
