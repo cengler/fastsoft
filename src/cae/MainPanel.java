@@ -27,6 +27,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 import cae.model.ProgramInfo;
@@ -169,6 +170,17 @@ public class MainPanel extends Panel implements ActionListener {
                     }
                 }
         );
+        
+        // OCULTAR COLUMNAS TODO
+        for (int i = 4; i < 12; i++) {
+        	TableColumn column = table.getColumnModel().getColumn(i);
+        	column.setMinWidth(0);
+        	column.setMaxWidth(0);
+        	column.setWidth(0);
+        	column.setPreferredWidth(0);
+        	doLayout();
+        }
+        
         JScrollPane scrollPane = new JScrollPane(table);
         c.gridx = 0;
 		c.gridy = 4;
