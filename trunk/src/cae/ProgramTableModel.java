@@ -10,14 +10,22 @@ public class ProgramTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	private List<ProgramInfo> data = null;
-
-	private static final int NAME = 0;
-	private static final int WEB = 1;
-	private static final int KEYS = 2;
-	private static final int SERIAL = 3;
-	private static final int NOTES = 4;
-	private String[] columnNames = {"Name", "Web", "Keys", "Serial", "Notes"};
 	
+	private static final int COMPANY 		= 0;
+	private static final int NAME 			= 1;
+	private static final int VERSION 		= 2;
+	private static final int DESCRIPTION 	= 3;
+	
+	private static final int WEB 			= 4;
+	private static final int SERIAL 		= 5;
+	private static final int KEYS 			= 6;
+	private static final int PLATAFORM 		= 7;
+	private static final int LANGUAGE 		= 8;
+	private static final int OS 			= 9;
+	private static final int BITS 			= 10;
+	private static final int CATEGORY 		= 11;
+	
+	private String[] columnNames = {"Compania", "Nombre", "Ver.", "Descripción", "Web", "Serial", "Palabras Clave", "Plataforma", "Lenguaje", "Sistema Operativo", "Bits", "Categoria"};
 	
 	public ProgramTableModel(List<ProgramInfo> data) 
 	{
@@ -44,12 +52,26 @@ public class ProgramTableModel extends AbstractTableModel {
 			return data.get(row).getName();
 		case WEB:
 			return data.get(row).getWeb();
-		case KEYS:
-			return data.get(row).getKeys();
 		case SERIAL:
 			return data.get(row).getSerial();
-		case NOTES:
-			return data.get(row).getNotes();
+		case DESCRIPTION:
+			return data.get(row).getDescription();
+		case KEYS:
+			return data.get(row).getKeys();
+		case PLATAFORM:
+			return data.get(row).getPlataform();
+		case VERSION:
+			return data.get(row).getVersion();
+		case COMPANY:
+			return data.get(row).getCompany();
+		case LANGUAGE:
+			return data.get(row).getLanguage();
+		case OS:
+			return data.get(row).getOs();
+		case BITS:
+			return data.get(row).getBits();
+		case CATEGORY:
+			return data.get(row).getCategory();
 		default:
 			return null;
 		}

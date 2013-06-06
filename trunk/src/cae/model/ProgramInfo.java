@@ -7,13 +7,16 @@ public class ProgramInfo {
 	private String name;
 	private String web;
 	private String serial;
-	private String notes;
+	private String description;
 	private String keys;
-	private String plataforma;
+	private String plataform;
 	private String version;
-	private String compania;
+	private String company;
+	private String language;
+	private String os;
+	private String bits;
+	private String category;
 	
-			
 	private File exe;
 	private File file;
 	private File keygen;
@@ -44,12 +47,6 @@ public class ProgramInfo {
 	public void setSerial(String serial) {
 		this.serial = serial;
 	}
-	public String getNotes() {
-		return notes;
-	}
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
 	public File getExe() {
 		return exe;
 	}
@@ -68,24 +65,11 @@ public class ProgramInfo {
 	public void setKeygen(File keygen) {
 		this.keygen = keygen;
 	}
-	
-	public String getPlataforma() {
-		return plataforma;
-	}
-	public void setPlataforma(String plataforma) {
-		this.plataforma = plataforma;
-	}
 	public String getVersion() {
 		return version;
 	}
 	public void setVersion(String version) {
 		this.version = version;
-	}
-	public String getCompania() {
-		return compania;
-	}
-	public void setCompania(String compania) {
-		this.compania = compania;
 	}
 	public File getPatch() {
 		return patch;
@@ -99,8 +83,46 @@ public class ProgramInfo {
 	public void setLeame(File leame) {
 		this.leame = leame;
 	}
-	@Override
-	public String toString() {
-		return "name: " + name;
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getPlataform() {
+		return plataform;
+	}
+	public void setPlataform(String plataform) {
+		this.plataform = plataform;
+	}
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	public String getOs() {
+		return os;
+	}
+	public void setOs(String os) {
+		this.os = os;
+	}
+	public String getBits() {
+		return bits;
+	}
+	public void setBits(String bits) {
+		this.bits = bits;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
 	}
 }
