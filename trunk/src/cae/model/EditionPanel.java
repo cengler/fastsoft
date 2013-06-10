@@ -1,4 +1,4 @@
-package cae;
+package cae.model;
 
 import java.awt.Desktop;
 import java.awt.GridBagConstraints;
@@ -15,12 +15,20 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import cae.model.ProgramInfo;
+import org.apache.log4j.Logger;
+
+import cae.resource.FSImageEnum;
+import cae.resource.FSResourceUtil;
+
 
 public class EditionPanel extends Panel implements ActionListener
 {
+	private static Logger LOGGER = Logger.getLogger(EditionPanel.class);
+	
+	private static final long serialVersionUID = 1L;
 	private JLabel nameLabel;
 	private ProgramInfo info;
 	
@@ -32,6 +40,8 @@ public class EditionPanel extends Panel implements ActionListener
 	private JTextField serialTextFiled;
 	
 	private Icon setupIcon;
+	
+	
 	
 	public EditionPanel()
 	{
@@ -63,32 +73,35 @@ public class EditionPanel extends Panel implements ActionListener
 		add(serialTextFiled, c);
 		c.gridwidth = 1;
 		
-		icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Info.png"));
+		icon = FSResourceUtil.getIcon(FSImageEnum.INFO);
 		leameButton = new JButton("Leame", icon);
+		leameButton.addActionListener(this);
 		c.gridx = 0;
 		c.gridy = 1;
 		add(leameButton, c);
 		
-		//ImageIcon icon = new ImageIcon(resour);
-		setupIcon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Settings.png"));
+		setupIcon = FSResourceUtil.getIcon(FSImageEnum.SETTINGS);
 		setupButton = new JButton("Setup", setupIcon);
+		setupButton.addActionListener(this);
 		c.gridx = 1;
 		c.gridy = 1;
 		add(setupButton, c);
 		
-		icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Tools.png"));
+		icon = FSResourceUtil.getIcon(FSImageEnum.TOOLS);
 		patchButton = new JButton("Patch", icon);
+		patchButton.addActionListener(this);
 		c.gridx = 2;
 		c.gridy = 1;
 		add(patchButton, c);
 		
-		icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Key.png"));
+		icon = FSResourceUtil.getIcon(FSImageEnum.KEY);
 		keygenButton = new JButton("Keygen", icon);
+		keygenButton.addActionListener(this);
 		c.gridx = 3;
 		c.gridy = 1;
 		add(keygenButton, c);
 		
-		icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("Folder.png"));
+		icon = FSResourceUtil.getIcon(FSImageEnum.FOLDER);
 		abrirButton = new JButton("Abrir", icon);
 		abrirButton.addActionListener(this);
 		c.gridx = 4;
@@ -114,7 +127,7 @@ public class EditionPanel extends Panel implements ActionListener
 		if(info != null)
 		{
 			nameLabel.setText(info.getName());
-			
+			serialTextFiled.setText(info.getSerial());
 			leameButton.setEnabled(info.getLeame() != null);
 			setupButton.setEnabled(info.getExe() != null);
 			abrirButton.setEnabled(info.getFile() != null);
@@ -126,11 +139,10 @@ public class EditionPanel extends Panel implements ActionListener
 				sun.awt.shell.ShellFolder sf;
 				try {
 					sf = sun.awt.shell.ShellFolder.getShellFolder(info.getExe());
-					Icon icon = new ImageIcon(sf.getIcon(true));
+					Icon icon = new ImageIcon(sf.getIcon(true)); // TODO sacar  resource
 					nameLabel.setIcon(icon);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error("Error al intentar obtener el icono del programa", e);
 				}
 			} 
 
@@ -146,6 +158,8 @@ public class EditionPanel extends Panel implements ActionListener
 			openExe(info.getPatch().getAbsolutePath());
 		}else if(e.getSource() == keygenButton) {
 			openExe(info.getKeygen().getAbsolutePath());
+		}else if(e.getSource() == leameButton) {
+			openExe(info.getLeame().getAbsolutePath());
 		}
 	}
 	
@@ -154,19 +168,26 @@ public class EditionPanel extends Panel implements ActionListener
     	try {
 			Desktop.getDesktop().open(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error( "No se pudo abrir: " + file, e);
+			JOptionPane.showMessageDialog(this,
+				    "No se pudo abrir: " + file,
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
 		}
     }
     
     private void openExe(String exe)
     {
+    	System.out.println("EXE:"+ exe);
     	try {
     		Runtime rt = Runtime.getRuntime() ;
     		rt.exec(exe);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error( "No se pudo abrir: " + exe, e);
+			JOptionPane.showMessageDialog(this,
+				    "No se pudo abrir: " + exe,
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
 		}
     }
 }

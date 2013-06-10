@@ -4,18 +4,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
+
+import org.apache.log4j.Logger;
 
 
 
 public class ProgramInfoFileAccess {
 
+	private static Logger LOGGER = Logger.getLogger(ProgramInfoFileAccess.class);
+	
 	private static final String NAME 		= "name";
 	private static final String WEB 		= "web";
 	private static final String SERIAL 		= "serial";
 	private static final String DESCRIPTION = "description";
 	private static final String KEYS 		= "keys";
-	private static final String PLATAFORM 	= "plataform";
 	private static final String VERSION 	= "version";
 	private static final String COMPANY 	= "company";
 	private static final String LANGUAGE 	= "language";
@@ -26,12 +31,15 @@ public class ProgramInfoFileAccess {
 	private static final String KEYGEN 		= "keygen";
 	private static final String PATCH 		= "patch";
 	private static final String LEAME 		= "leame";
+	private static final String IMPORTANCE	= "importance";
 	
-	public static ProgramInfo read(File caeFile) 
+	public static ProgramInfo read(File caeFile) throws FileNotFoundException 
 	{
+		InputStream is = new FileInputStream(caeFile);
+		
 		Properties p = new Properties();
 		try {
-			p.load(new FileInputStream(caeFile));
+			p.load(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,10 +59,7 @@ public class ProgramInfoFileAccess {
 		
 		if(p.getProperty(KEYS) != null)
 			info.setKeys(p.getProperty(KEYS));
-		
-		if(p.getProperty(PLATAFORM) != null)
-			info.setPlataform(p.getProperty(PLATAFORM));
-		
+
 		if(p.getProperty(VERSION) != null)
 			info.setVersion(p.getProperty(VERSION));
 		
@@ -73,6 +78,9 @@ public class ProgramInfoFileAccess {
 		if(p.getProperty(CATEGORY) != null)
 			info.setCategory(p.getProperty(CATEGORY));
 		
+		if(p.getProperty(IMPORTANCE) != null)
+			info.setImportance(p.getProperty(IMPORTANCE));
+		
 		if(p.getProperty(EXE) != null && !p.getProperty(EXE).isEmpty())
 			info.setExe(new File(caeFile.getParentFile().getAbsolutePath()+File.separatorChar+p.getProperty(EXE)));
 		
@@ -87,10 +95,16 @@ public class ProgramInfoFileAccess {
 		
 		info.setFile(caeFile);
 		
+		try {
+			is.close();
+		} catch (IOException e) {
+			LOGGER.error("No se pudo cerrar el archivo " + caeFile);
+		}
+		
 		return info;
 	}
 	
-	public static void write(ProgramInfo info) 
+	public static void write(ProgramInfo info) throws FileNotFoundException, IOException 
 	{
 		Properties p = new Properties();
 
@@ -112,9 +126,6 @@ public class ProgramInfoFileAccess {
 		if(info.getKeys() != null)
 			p.setProperty(KEYS, info.getKeys());
 		
-		if(info.getPlataform() != null)
-			p.setProperty(PLATAFORM, info.getPlataform());
-		
 		if(info.getVersion() != null)
 			p.setProperty(VERSION, info.getVersion());
 		
@@ -133,6 +144,9 @@ public class ProgramInfoFileAccess {
 		if(info.getCategory() != null)
 			p.setProperty(CATEGORY, info.getCategory());
 		
+		if(info.getImportance() != null)
+			p.setProperty(IMPORTANCE, info.getImportance());
+		
 		if(info.getExe() != null)
 			p.setProperty(EXE, info.getExe().getName());
 		
@@ -145,15 +159,9 @@ public class ProgramInfoFileAccess {
 		if(info.getLeame() != null)
 			p.setProperty(LEAME, info.getLeame().getName());
 		
-		try {
-			p.store(new FileOutputStream(info.getFile()), "");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		OutputStream os = new FileOutputStream(info.getFile());
+		p.store(os, "Fastsoft. caeycae\ncaeycae@gmail.com");
+		os.close();
 	}
 	
 }

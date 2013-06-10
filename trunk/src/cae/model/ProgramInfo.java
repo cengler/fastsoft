@@ -9,14 +9,13 @@ public class ProgramInfo {
 	private String serial;
 	private String description;
 	private String keys;
-	private String plataform;
 	private String version;
 	private String company;
 	private String language;
 	private String os;
 	private String bits;
 	private String category;
-	
+	private String importance;	
 	private File exe;
 	private File file;
 	private File keygen;
@@ -89,12 +88,6 @@ public class ProgramInfo {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getPlataform() {
-		return plataform;
-	}
-	public void setPlataform(String plataform) {
-		this.plataform = plataform;
-	}
 	public String getCompany() {
 		return company;
 	}
@@ -124,5 +117,11 @@ public class ProgramInfo {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public String getImportance() {
+		return importance;
+	}
+	public void setImportance(String importance) {
+		this.importance = importance;
 	}
 }
