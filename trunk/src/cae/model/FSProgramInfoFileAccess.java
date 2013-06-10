@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 
 
 
-public class ProgramInfoFileAccess {
+public class FSProgramInfoFileAccess {
 
-	private static Logger LOGGER = Logger.getLogger(ProgramInfoFileAccess.class);
+	private static Logger LOGGER = Logger.getLogger(FSProgramInfoFileAccess.class);
 	
 	private static final String NAME 		= "name";
 	private static final String WEB 		= "web";
@@ -33,7 +33,7 @@ public class ProgramInfoFileAccess {
 	private static final String LEAME 		= "leame";
 	private static final String IMPORTANCE	= "importance";
 	
-	public static ProgramInfo read(File caeFile) throws FileNotFoundException 
+	public static FSProgramInfo read(File caeFile) throws FileNotFoundException 
 	{
 		InputStream is = new FileInputStream(caeFile);
 		
@@ -43,7 +43,7 @@ public class ProgramInfoFileAccess {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ProgramInfo info = new ProgramInfo();
+		FSProgramInfo info = new FSProgramInfo(caeFile);
 		
 		if(p.getProperty(NAME) != null)
 			info.setName(p.getProperty(NAME));
@@ -82,18 +82,16 @@ public class ProgramInfoFileAccess {
 			info.setImportance(p.getProperty(IMPORTANCE));
 		
 		if(p.getProperty(EXE) != null && !p.getProperty(EXE).isEmpty())
-			info.setExe(new File(caeFile.getParentFile().getAbsolutePath()+File.separatorChar+p.getProperty(EXE)));
+			info.setExe(p.getProperty(EXE));
 		
 		if(p.getProperty(KEYGEN) != null && !p.getProperty(KEYGEN).isEmpty())
-			info.setKeygen(new File(caeFile.getParentFile().getAbsolutePath()+File.separatorChar+p.getProperty(KEYGEN)));
+			info.setKeygen(p.getProperty(KEYGEN));
 		
 		if(p.getProperty(PATCH) != null && !p.getProperty(PATCH).isEmpty())
-			info.setPatch(new File(caeFile.getParentFile().getAbsolutePath()+File.separatorChar+p.getProperty(PATCH)));
+			info.setPatch(p.getProperty(PATCH));
 		
 		if(p.getProperty(LEAME) != null && !p.getProperty(LEAME).isEmpty())
-			info.setLeame(new File(caeFile.getParentFile().getAbsolutePath()+File.separatorChar+p.getProperty(LEAME)));
-		
-		info.setFile(caeFile);
+			info.setLeame(p.getProperty(LEAME));
 		
 		try {
 			is.close();
@@ -104,7 +102,7 @@ public class ProgramInfoFileAccess {
 		return info;
 	}
 	
-	public static void write(ProgramInfo info) throws FileNotFoundException, IOException 
+	public static void write(FSProgramInfo info) throws FileNotFoundException, IOException 
 	{
 		Properties p = new Properties();
 
@@ -148,16 +146,16 @@ public class ProgramInfoFileAccess {
 			p.setProperty(IMPORTANCE, info.getImportance());
 		
 		if(info.getExe() != null)
-			p.setProperty(EXE, info.getExe().getName());
+			p.setProperty(EXE, info.getExe());
 		
 		if(info.getKeygen() != null)
-			p.setProperty(KEYGEN, info.getKeygen().getName());
+			p.setProperty(KEYGEN, info.getKeygen());
 		
 		if(info.getPatch() != null)
-			p.setProperty(PATCH, info.getPatch().getName());
+			p.setProperty(PATCH, info.getPatch());
 		
 		if(info.getLeame() != null)
-			p.setProperty(LEAME, info.getLeame().getName());
+			p.setProperty(LEAME, info.getLeame());
 		
 		OutputStream os = new FileOutputStream(info.getFile());
 		p.store(os, "Fastsoft. caeycae\ncaeycae@gmail.com");

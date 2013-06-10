@@ -1,4 +1,4 @@
-package cae.model;
+package cae.gui;
 
 import java.awt.Desktop;
 import java.awt.GridBagConstraints;
@@ -8,7 +8,6 @@ import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.Icon;
@@ -20,17 +19,18 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
+import cae.model.FSProgramInfo;
 import cae.resource.FSImageEnum;
 import cae.resource.FSResourceUtil;
 
 
-public class EditionPanel extends Panel implements ActionListener
+public class FSActiveProgramPanel extends Panel implements ActionListener
 {
-	private static Logger LOGGER = Logger.getLogger(EditionPanel.class);
+	private static Logger LOGGER = Logger.getLogger(FSActiveProgramPanel.class);
 	
 	private static final long serialVersionUID = 1L;
 	private JLabel nameLabel;
-	private ProgramInfo info;
+	private FSProgramInfo info;
 	
 	private JButton leameButton;
 	private JButton setupButton;
@@ -41,11 +41,8 @@ public class EditionPanel extends Panel implements ActionListener
 	
 	private Icon setupIcon;
 	
-	
-	
-	public EditionPanel()
+	public FSActiveProgramPanel()
 	{
-		
 		ImageIcon icon = null;
 		
 		setLayout(new GridBagLayout());
@@ -111,7 +108,7 @@ public class EditionPanel extends Panel implements ActionListener
 		setInfo(null);
 	}
 	
-	public void setInfo(ProgramInfo info)
+	public void setInfo(FSProgramInfo info)
 	{
 		this.info = info;
 		
@@ -136,16 +133,8 @@ public class EditionPanel extends Panel implements ActionListener
 			
 			if(info.getExe() != null)
 			{
-				sun.awt.shell.ShellFolder sf;
-				try {
-					sf = sun.awt.shell.ShellFolder.getShellFolder(info.getExe());
-					Icon icon = new ImageIcon(sf.getIcon(true)); // TODO sacar  resource
-					nameLabel.setIcon(icon);
-				} catch (FileNotFoundException e) {
-					LOGGER.error("Error al intentar obtener el icono del programa", e);
-				}
+				nameLabel.setIcon(FSResourceUtil.getExeIcon(info.getExeFile()));
 			} 
-
 		}
 	}
 
@@ -153,13 +142,13 @@ public class EditionPanel extends Panel implements ActionListener
 		if(e.getSource() == abrirButton) {
 			open(info.getFile().getParentFile());
 		} else if(e.getSource() == setupButton) {
-			openExe(info.getExe().getAbsolutePath());
+			openExe(info.getExeFile().getAbsolutePath());
 		} else if(e.getSource() == patchButton) {
-			openExe(info.getPatch().getAbsolutePath());
+			openExe(info.getPatchFile().getAbsolutePath());
 		}else if(e.getSource() == keygenButton) {
-			openExe(info.getKeygen().getAbsolutePath());
+			openExe(info.getKeygenFile().getAbsolutePath());
 		}else if(e.getSource() == leameButton) {
-			openExe(info.getLeame().getAbsolutePath());
+			openExe(info.getLeameFile().getAbsolutePath());
 		}
 	}
 	
