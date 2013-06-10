@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import cae.model.MainPanel;
+import cae.gui.MainPanel;
 import cae.resource.FSImageEnum;
 import cae.resource.FSResourceUtil;
 

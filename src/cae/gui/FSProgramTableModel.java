@@ -1,14 +1,16 @@
-package cae.model;
+package cae.gui;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import cae.model.FSProgramInfo;
 
 
-public class ProgramTableModel extends AbstractTableModel {
+
+public class FSProgramTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
-	private List<ProgramInfo> data = null;
+	private List<FSProgramInfo> data = null;
 	
 	public static final int COMPANY 		= 0;
 	public static final int NAME 			= 1;
@@ -28,11 +30,10 @@ public class ProgramTableModel extends AbstractTableModel {
 	
 	private String[] columnNames = {"Compania", "Nombre", "Ver.", "Descripción", "Web", "Serial", "Palabras Clave", "Lenguaje", "Sistema Operativo", "Bits", "Categoria", "Importancia"};
 	
-	public ProgramTableModel(List<ProgramInfo> data) 
+	public FSProgramTableModel(List<FSProgramInfo> data) 
 	{
 		this.data = data;
 	}
-	
 	
 	public int getColumnCount() {
 		return columnNames.length;
@@ -86,18 +87,16 @@ public class ProgramTableModel extends AbstractTableModel {
 		return true;
 	}
 	
-	public ProgramInfo getRowObject(int row)
+	public FSProgramInfo getRowObject(int row)
 	{
 		return data.get(row);
 	}
 
-	public List<ProgramInfo> getData() {
+	public List<FSProgramInfo> getData() {
 		return data;
 	}
 
-	public void setData(List<ProgramInfo> data) {
+	public void setData(List<FSProgramInfo> data) {
 		this.data = data;
 	}
-	
-	
 }
