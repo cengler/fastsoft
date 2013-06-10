@@ -1,9 +1,8 @@
-package cae;
+package cae.model;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import cae.model.ProgramInfo;
 
 
 public class ProgramTableModel extends AbstractTableModel {
@@ -11,21 +10,23 @@ public class ProgramTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private List<ProgramInfo> data = null;
 	
-	private static final int COMPANY 		= 0;
-	private static final int NAME 			= 1;
-	private static final int VERSION 		= 2;
-	private static final int DESCRIPTION 	= 3;
+	public static final int COMPANY 		= 0;
+	public static final int NAME 			= 1;
+	public static final int VERSION 		= 2;
+	public static final int DESCRIPTION 	= 3;
+	public static final int WEB 			= 4;
+	public static final int SERIAL 			= 5;
+	public static final int KEYS 			= 6;
+	public static final int LANGUAGE 		= 7;
+	public static final int OS 				= 8;
+	public static final int BITS 			= 9;
+	public static final int CATEGORY 		= 10;
+	public static final int IMPORTANCE		= 11;
 	
-	private static final int WEB 			= 4;
-	private static final int SERIAL 		= 5;
-	private static final int KEYS 			= 6;
-	private static final int PLATAFORM 		= 7;
-	private static final int LANGUAGE 		= 8;
-	private static final int OS 			= 9;
-	private static final int BITS 			= 10;
-	private static final int CATEGORY 		= 11;
+	public static final int FIRST_TO_HIDE	= WEB;
+	public static final int LAST_TO_HIDE	= IMPORTANCE;
 	
-	private String[] columnNames = {"Compania", "Nombre", "Ver.", "Descripción", "Web", "Serial", "Palabras Clave", "Plataforma", "Lenguaje", "Sistema Operativo", "Bits", "Categoria"};
+	private String[] columnNames = {"Compania", "Nombre", "Ver.", "Descripción", "Web", "Serial", "Palabras Clave", "Lenguaje", "Sistema Operativo", "Bits", "Categoria", "Importancia"};
 	
 	public ProgramTableModel(List<ProgramInfo> data) 
 	{
@@ -58,8 +59,6 @@ public class ProgramTableModel extends AbstractTableModel {
 			return data.get(row).getDescription();
 		case KEYS:
 			return data.get(row).getKeys();
-		case PLATAFORM:
-			return data.get(row).getPlataform();
 		case VERSION:
 			return data.get(row).getVersion();
 		case COMPANY:
@@ -72,13 +71,14 @@ public class ProgramTableModel extends AbstractTableModel {
 			return data.get(row).getBits();
 		case CATEGORY:
 			return data.get(row).getCategory();
+		case IMPORTANCE:
+			return data.get(row).getImportance();
 		default:
 			return null;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Class getColumnClass(int c) {
+	public Class<String> getColumnClass(int c) {
 		return String.class;
 	}
 

@@ -8,7 +8,7 @@
 <property name="dir.src" value="src" />
 <property name="dir.etc" value="etc" />
 <property name="name.jar" value="FastSoft.jar" />
-<property name="clase.main" value="cae.rev.FastSoft" />
+<property name="clase.main" value="cae.FastSOFTGui" />
 
 <path id="classpath">
         <fileset dir="${dir.lib}" includes="log4j.jar"/>   
